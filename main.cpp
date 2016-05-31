@@ -39,6 +39,8 @@
 ****************************************************************************/
 
 #include <QGuiApplication>
+#include <QProcess>
+
 #include "window.h"
 #include "compositor.h"
 
@@ -46,11 +48,39 @@ int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
-    Window window;
-    Compositor compositor(&window);
-    window.setCompositor(&compositor);
-    compositor.create();
-    window.showFullScreen();
+    QStringList args = QGuiApplication::arguments();
+    // Get rid of argv[0]
+    args.pop_front();
 
-    return app.exec();
+    if (args.length() == 0) {
+        qDebug() << "This command runs an application passed as an argument";
+    } else {
+        Window window;
+        Compositor compositor(&window);
+        window.setCompositor(&compositor);
+        compositor.create();
+        window.showFullScreen();
+
+        app.processEvents();
+
+        QProcess process;
+
+        QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+        // Nested testing
+        if (env.keys().contains("WAYLAND_DISPLAY"))
+            env.insert("WAYLAND_DISPLAY", "wayland-1");
+        //env.insert("WAYLAND_DISPLAY", "wayland-1");
+        // Why doesn't this work as expected?
+        //env.insert("QT_QPA_PLUGIN", "wayland");
+        process.setProcessEnvironment(env);
+
+        args << "-platform wayland";
+        QString launchLine = args.join(" ");
+
+        qDebug() << "launching" << launchLine;
+        process.start(launchLine);
+
+        return app.exec();
+    }
+    return -1;
 }

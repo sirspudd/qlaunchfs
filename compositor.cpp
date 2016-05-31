@@ -49,7 +49,6 @@
 #include <QtWaylandCompositor/qwaylandinput.h>
 #include <QtWaylandCompositor/qwaylanddrag.h>
 
-#include <QDebug>
 #include <QOpenGLContext>
 
 #ifndef GL_TEXTURE_EXTERNAL_OES
@@ -168,6 +167,7 @@ void Compositor::create()
     connect(this, &QWaylandCompositor::subsurfaceChanged, this, &Compositor::onSubsurfaceChanged);
 }
 
+
 void Compositor::onSurfaceCreated(QWaylandSurface *surface)
 {
     connect(surface, &QWaylandSurface::surfaceDestroyed, this, &Compositor::surfaceDestroyed);
@@ -227,6 +227,8 @@ CompositorView * Compositor::findView(const QWaylandSurface *s) const
 
 void Compositor::onWlShellSurfaceCreated(QWaylandWlShellSurface *wlShellSurface)
 {
+    wlShellSurface->sendConfigure(outputFor(m_window)->geometry().size(), QWaylandWlShellSurface::ResizeEdge(0));
+
     connect(wlShellSurface, &QWaylandWlShellSurface::startMove, this, &Compositor::onStartMove);
     connect(wlShellSurface, &QWaylandWlShellSurface::startResize, this, &Compositor::onWlStartResize);
     connect(wlShellSurface, &QWaylandWlShellSurface::setTransient, this, &Compositor::onSetTransient);

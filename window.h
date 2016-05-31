@@ -79,14 +79,11 @@ private:
 
     CompositorView *viewAt(const QPointF &point);
     bool mouseGrab() const { return m_grabState != NoGrab ;}
-    void drawBackground();
     void sendMouseEvent(QMouseEvent *e, CompositorView *target);
     static QPointF getAnchoredPosition(const QPointF &anchorPosition, int resizeEdge, const QSize &windowSize);
     static QPointF getAnchorPosition(const QPointF &position, int resizeEdge, const QSize &windowSize);
 
     QOpenGLTextureBlitter m_textureBlitter;
-    QSize m_backgroundImageSize;
-    QOpenGLTexture *m_backgroundTexture;
     Compositor *m_compositor;
     QPointer<CompositorView> m_mouseView;
     GrabState m_grabState;
