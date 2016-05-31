@@ -39,19 +39,18 @@
 ****************************************************************************/
 
 #include <QGuiApplication>
-#include "compositorwindow.h"
-#include "windowcompositor.h"
+#include "window.h"
+#include "compositor.h"
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
 
-    CompositorWindow window;
-    WindowCompositor compositor(&window);
+    Window window;
+    Compositor compositor(&window);
     window.setCompositor(&compositor);
     compositor.create();
-    window.resize(800,600);
-    window.show();
+    window.showFullScreen();
 
     return app.exec();
 }
