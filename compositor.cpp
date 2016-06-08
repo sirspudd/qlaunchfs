@@ -247,6 +247,7 @@ void Compositor::onXdgSurfaceCreated(QWaylandXdgSurface *xdgSurface)
     CompositorView *view = findView(xdgSurface->surface());
     Q_ASSERT(view);
     view->m_xdgSurface = xdgSurface;
+    view->onXdgSetFullscreen(nullptr);
 
     connect(xdgSurface, &QWaylandXdgSurface::setMaximized, view, &CompositorView::onXdgSetMaximized);
     connect(xdgSurface, &QWaylandXdgSurface::setFullscreen, view, &CompositorView::onXdgSetFullscreen);
