@@ -64,6 +64,11 @@ int main(int argc, char *argv[])
         app.processEvents();
 
         QProcess process;
+        QObject::connect(&process, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
+              [](int exitCode, QProcess::ExitStatus exitStatus) {
+            qDebug() << "Child process exited with" << exitStatus;
+            QGuiApplication::exit(exitCode);
+        });
 
         QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
         // Nested testing
