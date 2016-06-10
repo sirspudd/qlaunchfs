@@ -1,0 +1,5 @@
+#!/bin/bash
+# Reference script for use with qlaunchfs
+
+. /etc/profile.d/qpi.sh
+qmlscene /opt/qml-box2d-examples/cannon/main.qml $@

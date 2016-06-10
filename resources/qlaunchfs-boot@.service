@@ -1,17 +1,18 @@
 # Forked off xlogin@.service
 
 [Unit]
-Description=Fullscreen Qt-compositor login for app %i
+Description=Fullscreen Qt-compositor login for user %i
 After=x@vt7.service systemd-user-sessions.service
 Wants=x@vt7.service
 Conflicts=getty@tty7.service
 
 [Service]
-User=root
+EnvironmentFile=/etc/profile.d/qpi.sh
+User=%i
 WorkingDirectory=~
 TTYPath=/dev/tty7
 PAMName=login
-ExecStart=-/bin/qlaunchfs -plugin CECKeyboard %i
+ExecStart=-/bin/qlaunchfs -plugin CECKeyboard ./qlaunchfs-boot
 Restart=on-failure
 
 [Install]
