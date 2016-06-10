@@ -90,7 +90,8 @@ void Window::paintGL()
 {
     m_compositor->startRender();
     QOpenGLFunctions *functions = context()->functions();
-    functions->glClearColor(1.f, .6f, .0f, 0.5f);
+    //functions->glClearColor(1.f, .6f, .0f, 0.5f);
+    functions->glClearColor(.0f, .0f, .0f, 1.0f);
     functions->glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     m_textureBlitter.bind();
