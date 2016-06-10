@@ -55,7 +55,7 @@ int main(int argc, char *argv[])
     args.pop_front();
 
     if (args.length() == 0) {
-        qDebug() << "This command runs an application passed as an argument";
+        qDebug() << "This command runs a Qt application passed as an argument";
     } else {
         Window window;
         Compositor compositor(&window);
@@ -78,9 +78,10 @@ int main(int argc, char *argv[])
             env.insert("WAYLAND_DISPLAY", "wayland-1");
         //env.insert("WAYLAND_DISPLAY", "wayland-1");
         // Why doesn't this work as expected?
-        //env.insert("QT_QPA_PLUGIN", "wayland");
+        env.insert("QT_QPA_PLUGIN", "wayland");
         process.setProcessEnvironment(env);
 
+        // Clearly this assumes the item being launched propagates the flag
         args << "-platform wayland";
         QString launchLine = args.join(" ");
 
