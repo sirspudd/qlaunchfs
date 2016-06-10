@@ -1,5 +1,6 @@
 #!/bin/bash
 # Reference script for use with qlaunchfs
+# systemd script assumes this lives in the users home dir
 
 . /etc/profile.d/qpi.sh
 qmlscene /opt/qml-box2d-examples/cannon/main.qml $@
