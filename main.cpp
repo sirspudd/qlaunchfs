@@ -46,6 +46,8 @@
 
 int main(int argc, char *argv[])
 {
+    if (qgetenv("WAYLAND_DISPLAY").isNull())
+        qputenv("QT_QPA_PLATFORM", "eglfs");
     QGuiApplication app(argc, argv);
 
     QStringList args = QGuiApplication::arguments();
