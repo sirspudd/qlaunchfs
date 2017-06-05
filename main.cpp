@@ -49,19 +49,61 @@
 ****************************************************************************/
 
 #include <QGuiApplication>
+#include <QProcess>
+
 #include "window.h"
 #include "compositor.h"
 
 int main(int argc, char *argv[])
 {
+    if (qgetenv("WAYLAND_DISPLAY").isNull())
+        qputenv("QT_QPA_PLATFORM", "eglfs");
     QGuiApplication app(argc, argv);
 
-    Window window;
-    Compositor compositor(&window);
-    window.setCompositor(&compositor);
-    compositor.create();
-    window.resize(800,600);
-    window.show();
+    QStringList args = QGuiApplication::arguments();
+    // Get rid of argv[0]
+    args.pop_front();
 
-    return app.exec();
+    if (args.length() == 0) {
+        qDebug() << "This command runs a Qt application passed as an argument";
+    } else {
+        Window window;
+        Compositor compositor(&window);
+        window.setCompositor(&compositor);
+        compositor.create();
+        window.showFullScreen();
+
+        app.processEvents();
+
+        QProcess process;
+        QObject::connect(&process, &QProcess::errorOccurred,
+              [](QProcess::ProcessError error) {
+            qDebug() << "Child process hit the following error:" << error;
+            QGuiApplication::exit(-1);
+        });
+        QObject::connect(&process, static_cast<void(QProcess::*)(int, QProcess::ExitStatus)>(&QProcess::finished),
+              [](int exitCode, QProcess::ExitStatus exitStatus) {
+            qDebug() << "Child process exited with" << exitStatus;
+            QGuiApplication::exit(exitCode);
+        });
+
+        QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+        // Nested testing
+        if (env.keys().contains("WAYLAND_DISPLAY"))
+            env.insert("WAYLAND_DISPLAY", "wayland-1");
+        //env.insert("WAYLAND_DISPLAY", "wayland-1");
+        // Why doesn't this work as expected?
+        env.insert("QT_QPA_PLUGIN", "wayland");
+        process.setProcessEnvironment(env);
+
+        // Clearly this assumes the item being launched propagates the flag
+        args << "-platform wayland";
+        QString launchLine = args.join(" ");
+
+        qDebug() << "launching" << launchLine;
+        process.start(launchLine);
+
+        return app.exec();
+    }
+    return -1;
 }
