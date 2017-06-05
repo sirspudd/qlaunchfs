@@ -16,5 +16,4 @@ INCLUDEPATH += $$PWD/../../include
 
 RESOURCES += qwindow-compositor.qrc
 
-target.path = $$[QT_INSTALL_EXAMPLES]/wayland/qwindow-compositor
-INSTALLS += target
+TARGET = qlaunchfs
