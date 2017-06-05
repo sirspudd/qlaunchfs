@@ -280,6 +280,7 @@ View * Compositor::findView(const QWaylandSurface *s) const
 
 void Compositor::onWlShellSurfaceCreated(QWaylandWlShellSurface *wlShellSurface)
 {
+    wlShellSurface->sendConfigure(outputFor(m_window)->geometry().size(), QWaylandWlShellSurface::ResizeEdge(0));
     connect(wlShellSurface, &QWaylandWlShellSurface::startMove, this, &Compositor::onStartMove);
     connect(wlShellSurface, &QWaylandWlShellSurface::startResize, this, &Compositor::onWlStartResize);
     connect(wlShellSurface, &QWaylandWlShellSurface::setTransient, this, &Compositor::onSetTransient);
