@@ -1,7 +1,5 @@
 QT += gui gui-private core-private waylandcompositor waylandcompositor-private
 
-LIBS += -L ../../lib
-
 HEADERS += \
     window.h \
     compositor.h
@@ -9,11 +7,5 @@ HEADERS += \
 SOURCES += main.cpp \
     window.cpp \
     compositor.cpp
-
-# to make QtWaylandCompositor/... style includes working without installing
-INCLUDEPATH += $$PWD/../../include
-
-
-RESOURCES += qwindow-compositor.qrc
 
 TARGET = qlaunchfs

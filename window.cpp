@@ -76,24 +76,7 @@ void Window::setCompositor(Compositor *comp) {
 
 void Window::initializeGL()
 {
-    QImage backgroundImage = QImage(QLatin1String(":/background.jpg")).rgbSwapped();
-    backgroundImage.invertPixels();
-    m_backgroundTexture = new QOpenGLTexture(backgroundImage, QOpenGLTexture::DontGenerateMipMaps);
-    m_backgroundTexture->setMinificationFilter(QOpenGLTexture::Nearest);
-    m_backgroundImageSize = backgroundImage.size();
     m_textureBlitter.create();
-}
-
-void Window::drawBackground()
-{
-    for (int y = 0; y < height(); y += m_backgroundImageSize.height()) {
-        for (int x = 0; x < width(); x += m_backgroundImageSize.width()) {
-            QMatrix4x4 targetTransform = QOpenGLTextureBlitter::targetTransform(QRect(QPoint(x,y), m_backgroundImageSize), QRect(QPoint(0,0), size()));
-            m_textureBlitter.blit(m_backgroundTexture->textureId(),
-                              targetTransform,
-                              QOpenGLTextureBlitter::OriginTopLeft);
-        }
-    }
 }
 
 QPointF Window::getAnchorPosition(const QPointF &position, int resizeEdge, const QSize &windowSize)
@@ -122,7 +105,6 @@ void Window::paintGL()
     functions->glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
     m_textureBlitter.bind();
-    drawBackground();
 
     functions->glEnable(GL_BLEND);
     functions->glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

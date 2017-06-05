@@ -89,7 +89,6 @@ private:
 
     View *viewAt(const QPointF &point);
     bool mouseGrab() const { return m_grabState != NoGrab ;}
-    void drawBackground();
     void sendMouseEvent(QMouseEvent *e, View *target);
     static QPointF getAnchoredPosition(const QPointF &anchorPosition, int resizeEdge, const QSize &windowSize);
     static QPointF getAnchorPosition(const QPointF &position, int resizeEdge, const QSize &windowSize);
