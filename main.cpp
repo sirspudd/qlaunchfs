@@ -56,8 +56,18 @@
 
 int main(int argc, char *argv[])
 {
-    if (qgetenv("WAYLAND_DISPLAY").isNull())
+    if (qgetenv("WAYLAND_DISPLAY").isNull()) {
         qputenv("QT_QPA_PLATFORM", "eglfs");
+    }
+
+    QSurfaceFormat format = QSurfaceFormat::defaultFormat();
+    format.setAlphaBufferSize(0);
+    format.setRedBufferSize(8);
+    format.setGreenBufferSize(8);
+    format.setBlueBufferSize(8);
+    format.setSwapBehavior(QSurfaceFormat::TripleBuffer);
+    QSurfaceFormat::setDefaultFormat(format);
+
     QGuiApplication app(argc, argv);
 
     QStringList args = QGuiApplication::arguments();
