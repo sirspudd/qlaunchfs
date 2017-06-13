@@ -62,6 +62,9 @@
 #include <QDebug>
 #include <QOpenGLContext>
 
+#include <QGuiApplication>
+#include <QScreen>
+
 #ifndef GL_TEXTURE_EXTERNAL_OES
 #define GL_TEXTURE_EXTERNAL_OES 0x8D65
 #endif
@@ -206,8 +209,9 @@ Compositor::~Compositor()
 
 void Compositor::create()
 {
+    QSize screenSize = qApp->primaryScreen()->availableSize();
     QWaylandOutput *output = new QWaylandOutput(this, m_window);
-    QWaylandOutputMode mode(QSize(800, 600), 60000);
+    QWaylandOutputMode mode(QSize(screenSize.width(), screenSize.height()), 60000);
     output->addMode(mode, true);
     QWaylandCompositor::create();
     output->setCurrentMode(mode);
@@ -281,6 +285,7 @@ View * Compositor::findView(const QWaylandSurface *s) const
 void Compositor::onWlShellSurfaceCreated(QWaylandWlShellSurface *wlShellSurface)
 {
     wlShellSurface->sendConfigure(outputFor(m_window)->geometry().size(), QWaylandWlShellSurface::ResizeEdge(0));
+
     connect(wlShellSurface, &QWaylandWlShellSurface::startMove, this, &Compositor::onStartMove);
     connect(wlShellSurface, &QWaylandWlShellSurface::startResize, this, &Compositor::onWlStartResize);
     connect(wlShellSurface, &QWaylandWlShellSurface::setTransient, this, &Compositor::onSetTransient);

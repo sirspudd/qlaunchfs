@@ -2,8 +2,7 @@
 
 [Unit]
 Description=Fullscreen Qt-compositor login for user %i
-After=x@vt7.service systemd-user-sessions.service
-Wants=x@vt7.service
+After=systemd-user-sessions.service
 Conflicts=getty@tty7.service
 
 [Service]
@@ -14,6 +13,7 @@ TTYPath=/dev/tty7
 PAMName=login
 ExecStart=-/bin/qlaunchfs ./qlaunchfs-boot
 Restart=on-failure
+Environment=QT_WAYLAND_CLIENT_BUFFER_INTEGRATION=brcm
 
 [Install]
 WantedBy=graphical.target
